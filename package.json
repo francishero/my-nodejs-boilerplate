@@ -4,7 +4,9 @@
   "description": "Nodejs restiful api boilerplate using the latest javascript features",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "dev:build": "webpack -w",
+    "dev": "cross-env NODE_ENV=development nodemon dist/index.bundle.js"
   },
   "repository": {
     "type": "git",
@@ -27,8 +29,21 @@
   "homepage": "https://github.com/francishero/my-nodejs-boilerplate#readme",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "compression": "^1.6.2",
     "cross-env": "^5.0.1",
     "express": "^4.15.3",
-    "mongoose": "^4.10.7"
+    "helmet": "^3.6.1",
+    "mongoose": "^4.10.7",
+    "validator": "^7.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
+    "morgan": "^1.8.2",
+    "nodemon": "^1.11.0",
+    "webpack": "^3.0.0",
+    "webpack-node-externals": "^1.6.0"
   }
 }
