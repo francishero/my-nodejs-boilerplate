@@ -1,6 +1,8 @@
-import {Router} from 'express'
+import express from 'express'
 import * as userController from './user.controller'
-const routes=new Router()
 
-routes.get('/signup',userController.signUp)
-export default routes;
+const router=express.Router()
+
+router.route('/signup')
+      .post(userController.signUp)
+export default router;
