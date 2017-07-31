@@ -46,8 +46,8 @@ const userSchema=new Schema({
          return passwordRegex.test(password)
        },message:'{VALUE} is not a valid password'
     }
-  }
-});
+  },
+},{timestamps:true},{toJSON:{virtuals:true}});
 //plugins
 userSchema.plugin(uniqueValidator,{
   message:'{VALUE} must be unique'

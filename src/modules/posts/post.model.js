@@ -30,7 +30,7 @@ const postSchema=new Schema({
     type:Number,
     default:0
   },
-},{timestamps:true});
+},{timestamps:true},{toJSON:{virtuals:true}});
 //plugins
 postSchema.plugin(uniqueValidator,{
   message:`{VALUE} must be unique`
@@ -46,6 +46,17 @@ postSchema.pre('save',function(next){
 postSchema.methods={
   _slugify(){
     this.slug=slug(this.title)
+  },
+  toJSON(){
+    return{
+      _id:this._id,
+      title:this.title,
+      text:this.text,
+      createdAt:this.createdAt,
+      slug:this.slug,
+      favoriteCount:this.favoriteCount,
+      user:this.user
+    }
   }
 }
 //statics are like static methods on a class

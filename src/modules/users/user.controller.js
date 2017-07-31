@@ -12,6 +12,6 @@ import User from './user.model'
 
  export async function login(req,res,next){
    //passport has put the user in `req.user`
-   res.status(200).json(req.user.createToken())
+   res.status(200).json(req.user) //if it doesnt return token use req.user.createToken()
    return next()
  }
