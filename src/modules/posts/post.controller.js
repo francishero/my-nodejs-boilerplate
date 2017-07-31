@@ -13,3 +13,20 @@ export async function createPost(req,res){
     res.status(500).json(err)
   }
 }
+
+/*=================================
+getPostById returns a post with the /:id
+==================================*/
+export async function getPostById(req,res){
+  const id=req.params.id
+  try{
+    const post= await Post.findById(id)
+    res.status(200).json({
+      code:0,
+      data:post
+    })
+  }
+  catch(err){
+    res.status(500).json(err)
+  }
+}

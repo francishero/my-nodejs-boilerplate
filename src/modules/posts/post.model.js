@@ -33,7 +33,7 @@ const postSchema=new Schema({
 },{timestamps:true});
 //plugins
 postSchema.plugin(uniqueValidator,{
-  message:'{VALUE} must be unique'
+  message:`{VALUE} must be unique`
 })
 
 //hooks
