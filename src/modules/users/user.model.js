@@ -1,6 +1,13 @@
 import mongoose,{Schema} from 'mongoose'
 import validator from 'validator'
 import {passwordRegex} from './user.validations'
+//encrypt the user password and then use compareSync to compare
+import {hashSync,compareSync} from 'bcrypt-nodejs'
+//now we need to send a token to the user
+import jwt from 'jsonwebtoken'
+//we need the JWT_SECRET from the config
+import constants from '../../config/constants'
+
 const userSchema=new Schema({
   email:{
     type:String,
@@ -39,5 +46,38 @@ const userSchema=new Schema({
        },message:'{VALUE} is not a valid password'
     }
   }
+});
+//this is called before the save method is called
+userSchema.pre('save',function(next){
+  /*we use function here so we have access to  `this`*/
+  /* `this` represents the current user
+  /* only encrpt the user password if it has changed */
+  if(this.isModified('password')){
+    this.password=this._hashPassword(this.password)
+    return next()
+  }
+  return next()
 })
+
+userSchema.methods={
+  //encrypt the users password and return it
+  _hashPassword(password){
+    return hashSync(password)
+  },
+  authenticateUser(password){
+    //compare the password from the frontend with the one in the db
+    return compareSync(password,this.password)
+  },
+  createToken(){
+    return jwt.sign({_id:this._id},constants.JWT_SECRET)
+  },
+  toJSON(){
+    return{
+      _id:this._id,
+      userName:this.userName,
+      token:`JWT ${createToken()}`
+    }
+  },
+}
 export default mongoose.model('User',userSchema)
+

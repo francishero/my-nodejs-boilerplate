@@ -9,3 +9,9 @@ import User from './user.model'
       res.status(500).json(err)
    }
  }
+
+ export async function login(req,res,next){
+   //passport has put the user in `req.user`
+   res.status(200).json(req.user.createToken)
+   return next()
+ }
