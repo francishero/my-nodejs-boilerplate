@@ -1,5 +1,6 @@
 import mongoose,{Schema} from 'mongoose'
 import validator from 'validator'
+import uniqueValidator from 'mongoose-unique-validator'
 import {passwordRegex} from './user.validations'
 //encrypt the user password and then use compareSync to compare
 import {hashSync,compareSync} from 'bcrypt-nodejs'
@@ -47,6 +48,10 @@ const userSchema=new Schema({
     }
   }
 });
+//plugins
+userSchema.plugin(uniqueValidator,{
+  message:'{VALUE} must be unique'
+})
 //this is called before the save method is called
 userSchema.pre('save',function(next){
   /*we use function here so we have access to  `this`*/
@@ -71,6 +76,7 @@ userSchema.methods={
   createToken(){
     return jwt.sign({_id:this._id},constants.JWT_SECRET)
   },
+/*TODO fix */
   toJSON(){
     return{
       _id:this._id,
