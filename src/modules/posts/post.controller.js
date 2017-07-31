@@ -20,7 +20,7 @@ getPostById returns a post with the /:id
 export async function getPostById(req,res){
   const id=req.params.id
   try{
-    const post= await Post.findById(id)
+    const post= await Post.findById(id).populate('user')
     res.status(200).json({
       code:0,
       data:post

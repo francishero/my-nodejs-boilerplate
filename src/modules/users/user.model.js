@@ -76,12 +76,21 @@ userSchema.methods={
   createToken(){
     return jwt.sign({_id:this._id},constants.JWT_SECRET)
   },
-/*TODO fix */
+/*toAuthJSON is used to return a token
+  add it to the end of the json returning tokens routes
+ */
+  toAuthJSON(){
+      return{
+      _id:this._id,
+      userName:this.userName,
+      token:`JWT ${this.createToken()}`
+    }
+  },
+  /* toJSON is used to return selected fields */
   toJSON(){
     return{
       _id:this._id,
-      userName:this.userName,
-      token:`JWT ${createToken()}`
+      userName:this.userName
     }
   },
 }
