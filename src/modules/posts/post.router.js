@@ -14,5 +14,18 @@ getPostById returns a post with the /:id
 ==================================*/
 router.route('/:id')
       .get(postController.getPostById)
+/*=================================
+getPostList returns all posts
+==================================*/
+router.route('/')
+      .get(postController.getPostList)
+/*==================================
+updatePost requires the user to be logged in
+=====================================*/
+router.route('/:postId')
+      .patch(authjwt,validate(postValidation.updatePost),postController.updatePost)
+      .delete(authjwt,postController.deletePost)
 
 export default router;
+
+

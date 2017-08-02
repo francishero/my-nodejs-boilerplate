@@ -67,6 +67,15 @@ postSchema.statics={
       ...args,
       user,
     })
+  },
+  //pagination
+  list({skip=0, limit=5}={}){
+    //we do that to support destructing
+    return this.find()
+                .sort({createdAt:-1})
+                .skip(skip)
+                .limit(limit)
+                .populate('user')
   }
 }
 
