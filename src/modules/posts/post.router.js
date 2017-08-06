@@ -25,6 +25,13 @@ updatePost requires the user to be logged in
 router.route('/:postId')
       .patch(authjwt,validate(postValidation.updatePost),postController.updatePost)
       .delete(authjwt,postController.deletePost)
+/*==================================
+favorite a post requires user to be
+logged in
+=====================================*/
+router.route('/:postId/favoritePost')
+      .post(authjwt,postController.favoritePost)
+
 
 export default router;
 

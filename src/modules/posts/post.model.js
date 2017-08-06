@@ -76,7 +76,17 @@ postSchema.statics={
                 .skip(skip)
                 .limit(limit)
                 .populate('user')
+  },
+  //the favoriteCount function will be on the post schema itself
+  incFavoriteCount(postId)
+  {
+    return this.findByIdAndUpdate(postId,{$inc:{favoriteCount:1}})
+  },
+  decFavoriteCount(postId)
+  {
+    return this.findByIdAndUpdate(postId,{$inc:{favoriteCount:-1}})
   }
+
 }
 
 export default mongoose.model('Post',postSchema);

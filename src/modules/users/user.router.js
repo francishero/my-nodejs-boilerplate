@@ -1,5 +1,6 @@
 import express from 'express'
 import * as userController from './user.controller'
+
 //express-validation is a way to make validation as middleware
 import validate from 'express-validation'
 //the validation to use
@@ -16,5 +17,7 @@ router.route('/signup')
 //test this by using the email and password of an existing user
 router.route('/login')
       .post(authLocal,userController.login)
+router.route('/')
+      .get(userController.getAllUsers)
 export default router;
 

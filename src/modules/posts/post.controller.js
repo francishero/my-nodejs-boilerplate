@@ -1,5 +1,6 @@
 import Post from './post.model'
 import httpStatus from 'http-status'
+import user from '../users/user.model'
 
 export async function createPost(req,res){
   try{
@@ -86,4 +87,26 @@ export async function deletePost(req,res){
   }
   await post.remove()
   res.sendStatus(httpStatus.OK)
+}
+/*=================================
+favoritePost toggles adding a post
+to the users list of liked posts
+==================================*/
+export async function favoritePost(req,res)
+{
+  //api/v1/posts/:postId/favoritePost
+  const {postId}=req.params
+  try{
+  //find the logged in user
+  const user= await User.findById(req.user._id)
+  //now we need to add this postId to the users list of liked posts
+  await user._favorites.posts(postId)
+  res.status(httpStatus.OK)
+}
+catch(err)
+{
+  res.status(httpStatus.BAD_REQUEST).json(err)
+}
+
+
 }

@@ -8,6 +8,8 @@ import {hashSync,compareSync} from 'bcrypt-nodejs'
 import jwt from 'jsonwebtoken'
 //we need the JWT_SECRET from the config
 import constants from '../../config/constants'
+import Post from '../posts/post.model'
+const {ObjectId}=mongoose.Schema.Types
 
 const userSchema=new Schema({
   email:{
@@ -47,6 +49,12 @@ const userSchema=new Schema({
        },message:'{VALUE} is not a valid password'
     }
   },
+  favorites:{
+    posts:[{
+      type:ObjectId,
+      ref:'Post'
+    }]
+  }
 },{timestamps:true},{toJSON:{virtuals:true}});
 //plugins
 userSchema.plugin(uniqueValidator,{
@@ -63,6 +71,16 @@ userSchema.pre('save',function(next){
   }
   return next()
 })
+
+userSchema.statics={
+  list({skip=0,limit=5}={}){
+    return this.find()
+              .sort({createdAt:-1})
+              .skip(skip)
+              .limit(limit)
+              .populate('favorites.posts')
+  }
+}
 
 userSchema.methods={
   //encrypt the users password and return it
@@ -90,9 +108,33 @@ userSchema.methods={
   toJSON(){
     return{
       _id:this._id,
-      userName:this.userName
+      userName:this.userName,
+      firstName:this.firstName,
+      lastname:this.lastName,
+      email:this.email,
+
     }
   },
+  _favorites:
+  {
+    async posts(postId){
+      if(this.favorites.posts.indexOf(postId)>=0)
+    {
+      /* a Post is identified by the postId so we remove it we remove the post */
+      this.favorites.posts.remove(postId)
+      //the post's favoriteCount is reduced
+      await Post.decFavoriteCount(postId)
+    }
+    else{
+      this.favorites.posts.push(postId)
+      await Post.incFavoriteCount(postId)
+    }
+    /* save the currrent state to the db */
+    await this.save()
+    }
+
+
+  }
 }
 export default mongoose.model('User',userSchema)
 

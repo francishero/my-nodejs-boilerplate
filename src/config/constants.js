@@ -10,7 +10,7 @@
      MONGO_URL:'mongodb://localhost:27017/my-node-boiler-prod'
  }
  const defaultConfig={
-   PORT: process.env.PORT || 8006
+   PORT: process.env.PORT || 8007
  }
  function envConfig(env){
    switch(env){
